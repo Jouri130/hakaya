@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>حكايا</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fcf3ec;--logo:#792152;--ink:#4a3751;--btn:#862461;--line:#e1d8d3;--tint:rgba(134,36,97,.08)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tajawal,Tahoma,sans-serif;font-size:17px;line-height:1.8}
+.view{display:none;min-height:100vh;flex-direction:column;align-items:center;animation:in .4s ease}
+.view.on{display:flex}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.wrap{width:100%;max-width:560px;padding:20px 20px 0}
+.logo{display:block;margin:0 auto;mix-blend-mode:multiply;width:210px;max-width:60%}
+.logo.sm{width:110px}
+h1,h2{color:var(--ink);margin:.3em 0}
+h2{font-size:20px;margin:26px 0 10px}
+.center{text-align:center}
+.sub{opacity:.85;margin:6px 0}
+.btn{display:block;width:100%;background:var(--btn);color:#fff;border:0;border-radius:18px;padding:15px;font:700 18px Tajawal,sans-serif;cursor:pointer;margin:22px 0 8px;box-shadow:0 6px 16px rgba(134,36,97,.22);transition:transform .15s}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:#fff;color:var(--btn);border:1.5px solid var(--btn);box-shadow:none;margin:10px 0}
+input[type=text]{width:100%;padding:14px 16px;font:500 18px Tajawal,sans-serif;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:16px;outline:0}
+input:focus{border-color:var(--btn)}
+.opts{display:grid;gap:10px}
+.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:repeat(3,1fr)}
+.opt{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:12px 6px;text-align:center;font:500 17px Tajawal,sans-serif;color:var(--ink);cursor:pointer;transition:.15s}
+.opt b{display:block;font-size:24px;line-height:1.4}
+.opt.sel{border-color:var(--btn);background:#f6e6ee;box-shadow:0 0 0 2px var(--tint);color:var(--logo);font-weight:700}
+.err{color:var(--logo);background:#f6e6ee;border-radius:12px;padding:10px 14px;margin-top:14px;display:none}
+.foot{margin-top:auto;width:100%;max-width:700px;padding-top:30px;pointer-events:none}
+.foot img{width:100%;display:block;-webkit-mask-image:linear-gradient(transparent,#000 35%);mask-image:linear-gradient(transparent,#000 35%)}
+.dots{display:flex;gap:8px;justify-content:center;margin:26px 0}
+.dots i{width:10px;height:10px;border-radius:50%;background:var(--btn);animation:b 1.2s infinite}
+.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
+@keyframes b{0%,80%,100%{opacity:.25;transform:scale(.8)}40%{opacity:1;transform:scale(1.2)}}
+.card{background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:6px 22px 14px;margin-top:14px}
+.card p{margin:.9em 0;font-size:19px;line-height:2}
+.w{color:var(--logo);border-bottom:1.5px dashed var(--logo);cursor:pointer}
+#gl{display:none;background:#f6e6ee;border-radius:12px;padding:10px 14px;margin-top:10px}
+.moral{display:none;background:#f6e6ee;border:1.5px solid var(--btn);border-radius:18px;padding:14px 18px;margin-top:10px;font-weight:500}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:16px 0}
+.bar i{display:block;height:100%;background:var(--btn);width:0;transition:.4s}
+.opt.ok{background:#f6e6ee;border-color:var(--btn)} .opt.no{opacity:.45}
+.opt.al{text-align:right;padding:14px 16px;margin-bottom:10px;display:block;width:100%}
+.big{font-size:56px;text-align:center}
+.conf{position:fixed;top:-20px;width:10px;height:14px;border-radius:3px;animation:f 3s linear forwards;z-index:9}
+@keyframes f{to{transform:translateY(110vh) rotate(540deg)}}
+.top{display:flex;justify-content:space-between;align-items:center;width:100%}
+.back{background:none;border:0;color:var(--btn);font:700 16px Tajawal,sans-serif;cursor:pointer}
+</style>
+</head>
+<body>
+
+<!-- الرئيسية -->
+<section class="view on" id="home"><div class="wrap center">
+  <img class="logo" src="logo.png" alt="حكايا" style="margin-top:20px">
+  <h1 style="margin-top:34px;font-size:24px">مو كل قصة تُروى… بعض القصص تُعاش.</h1>
+  <p class="sub">اكتب اسمك، اختر عالمك، وكن بطل الحكاية.</p>
+  <p class="sub" style="font-size:14px">قصص جديدة مستوحاة من البيئة والتراث السعودي</p>
+  <button class="btn" onclick="go('setup')">ابدأ حكايتك</button>
+  <button class="btn ghost" onclick="startQuiz()">🏆 مسابقة حكايا</button>
+</div><div class="foot"><img src="footer.png" alt=""></div></section>
+
+<!-- الإعداد -->
+<section class="view" id="setup"><div class="wrap">
+  <div class="top"><button class="back" onclick="go('home')">رجوع ›</button><img class="logo sm" src="logo.png" alt="حكايا" style="margin:0"></div>
+  <h2>من بطل الحكاية؟</h2>
+  <input type="text" id="name" maxlength="30" placeholder="اكتب الاسم هنا" aria-label="اسم بطل القصة">
+  <h2>بطل أم بطلة؟</h2>
+  <div class="opts c2" data-k="gender"><button class="opt" data-v="ولد">ولد</button><button class="opt" data-v="بنت">بنت</button></div>
+  <h2>كم عمرك؟</h2>
+  <div class="opts c3" data-k="age"><button class="opt" data-v="4-6">4–6</button><button class="opt" data-v="7-9">7–9</button><button class="opt" data-v="10-12">10–12</button></div>
+  <h2>وين بتكون الحكاية؟</h2>
+  <div class="opts c3" data-k="region">
+    <button class="opt" data-v="نجد"><b>🏜️</b>نجد</button><button class="opt" data-v="القصيم"><b>🌿</b>القصيم</button><button class="opt" data-v="الأحساء"><b>🌴</b>الأحساء</button>
+    <button class="opt" data-v="عسير" style="grid-column:2"><b>⛰️</b>عسير</button><button class="opt" data-v="العلا" style="grid-column:3"><b>🏔️</b>العلا</button>
+  </div>
+  <h2>وش نوع الحكاية؟</h2>
+  <div class="opts c3" data-k="category"><button class="opt" data-v="ذكاء"><b>🧠</b>ذكاء</button><button class="opt" data-v="مغامرة"><b>🗺️</b>مغامرة</button><button class="opt" data-v="حكمة"><b>🌱</b>حكمة</button></div>
+  <div class="err" id="err"></div>
+  <button class="btn" id="go" onclick="make()">ابدأ الحكاية</button>
+</div><div class="foot"><img src="footer.png" alt=""></div></section>
+
+<!-- التحضير -->
+<section class="view" id="load"><div class="wrap center" style="margin-top:22vh">
+  <img class="logo sm" src="logo.png" alt="حكايا">
+  <h2 id="lt" style="margin-top:30px"></h2><div class="dots"><i></i><i></i><i></i></div>
+  <p class="sub">نختار التفاصيل، ونبني المغامرة، ونجهز الحكاية لك ✨</p>
+</div></section>
+
+<!-- القصة -->
+<section class="view" id="story"><div class="wrap">
+  <div class="top"><button class="back" onclick="go('home')">‹ الرئيسية</button><img class="logo sm" src="logo.png" alt="حكايا" style="margin:0"></div>
+  <h1 id="st" class="center" style="font-size:26px;margin-top:14px"></h1>
+  <p class="center sub" id="sh"></p>
+  <button class="btn" id="play" onclick="speak()">🔊 اسمع الحكاية</button>
+  <div class="err" id="serr" style="display:none"></div>
+  <div class="card" id="body"></div><div id="gl"></div>
+  <button class="btn ghost" onclick="document.getElementById('mo').style.display='block'">وش العبرة؟</button>
+  <div class="moral" id="mo"></div>
+  <button class="btn" onclick="startQuiz()">🏆 مسابقة حكايا</button>
+</div><div class="foot"><img src="footer.png" alt=""></div></section>
+
+<!-- المسابقة (منفصلة عن توليد القصة) -->
+<section class="view" id="quiz"><div class="wrap">
+  <div class="top"><button class="back" onclick="go('home')">‹ الرئيسية</button><img class="logo sm" src="logo.png" alt="حكايا" style="margin:0"></div>
+  <div class="bar"><i id="qb"></i></div>
+  <div id="qa"></div>
+</div><div class="foot"><img src="footer.png" alt=""></div></section>
+
+<script>
+const $=s=>document.querySelector(s), sel={};
+function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));scrollTo(0,0)}
+document.querySelectorAll('.opts').forEach(g=>g.addEventListener('click',e=>{
+  const b=e.target.closest('.opt');if(!b)return;
+  g.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel[g.dataset.k]=b.dataset.v;
+  if(g.dataset.k==='gender')$('#go').textContent=sel.gender==='بنت'?'ابدئي الحكاية':'ابدأ الحكاية';
+}));
+const err=m=>{const e=$('#err');e.textContent=m;e.style.display=m?'block':'none'};
+
+let data=null,audio=null;
+async function make(){
+  const name=$('#name').value.trim();
+  if(!name)return err('اكتبي اسم بطل الحكاية أول 🤍');
+  if(!sel.gender)return err('اختاري بطل أو بطلة الحكاية.');
+  if(!sel.age)return err('اختاري عمر البطل.');
+  if(!sel.region)return err('اختاري مكان الحكاية.');
+  if(!sel.category)return err('اختاري نوع الحكاية.');
+  err('');$('#lt').textContent='جاري تحضير حكاية '+name+'...';go('load');
+  try{
+    const r=await fetch('/api/story',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,...sel})});
+    if(!r.ok)throw 0;data=await r.json();
+    if(!data.title||!Array.isArray(data.paragraphs))throw 0;
+    data.name=name;render();go('story');
+  }catch(e){go('setup');err('صار خلل بسيط، جرّبي مرة ثانية 🤍')}
+}
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function render(){
+  stopAudio();$('#serr').style.display='none';$('#gl').style.display='none';$('#mo').style.display='none';
+  $('#st').textContent=data.title;
+  $('#sh').textContent=(sel.gender==='بنت'?'بطلة الحكاية: ':'بطل الحكاية: ')+data.name;
+  const words=Object.keys(data.glossary||{}).sort((a,b)=>b.length-a.length);
+  const re=words.length?new RegExp('(?<![\\u0621-\\u064A])('+words.map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')(?![\\u0621-\\u064A])','g'):null;
+  $('#body').innerHTML=data.paragraphs.map(p=>'<p>'+(re?esc(p).replace(re,'<span class="w">$1</span>'):esc(p))+'</p>').join('');
+  $('#mo').textContent='العبرة: '+(data.moral||'');
+}
+$('#body').addEventListener('click',e=>{
+  const w=e.target.closest('.w');if(!w)return;const g=$('#gl');
+  g.textContent=w.textContent+' = '+data.glossary[w.textContent];g.style.display='block';
+});
+
+// الصوت: Azure عبر الخادم، وإذا فشل نستخدم صوت المتصفح، والنص يبقى ظاهرًا دائمًا
+function stopAudio(){if(audio){audio.pause();audio=null}speechSynthesis.cancel();$('#play').textContent='🔊 اسمع الحكاية'}
+async function speak(){
+  if(audio||speechSynthesis.speaking){return stopAudio()}
+  const text=data.paragraphs.join('\n'),btn=$('#play');btn.textContent='⏳ لحظة...';
+  try{
+    const r=await fetch('/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});
+    if(!r.ok)throw 0;audio=new Audio(URL.createObjectURL(await r.blob()));
+    audio.onended=stopAudio;await audio.play();btn.textContent='⏸ إيقاف';
+  }catch(e){
+    audio=null;
+    if('speechSynthesis' in window){const u=new SpeechSynthesisUtterance(text);u.lang='ar-SA';u.rate=.85;u.onend=stopAudio;speechSynthesis.speak(u);btn.textContent='⏸ إيقاف'}
+    else{btn.textContent='🔊 اسمع الحكاية';$('#serr').textContent='الصوت غير متاح الحين، تقدرين تقرئين الحكاية 🤍';$('#serr').style.display='block'}
+  }
+}
+
+/* ===== المسابقة =====
+ كل سؤال: q, o (الخيارات), a (رقم الصحيحة). كل زائرة تحصل على 5 أسئلة عشوائية من هذه القائمة بترتيب خيارات عشوائي.
+ أضيفوا أو عدّلوا الأسئلة هنا فقط. */
+const POOL=[
+ {q:'وش الشيء اللي يميز حكايا؟',o:['تقدم قصصًا ثابتة لجميع الأطفال','تجعل الطفل بطل القصة وتخصص التجربة حسب اختياراته','تستخدم الذكاء الاصطناعي فقط لقراءة القصص'],a:1},
+ {q:'أي من التالي يدخل في تخصيص حكاية الطفل؟',o:['اسمه وعمره والمنطقة ونوع القصة','لون جواله','عدد التطبيقات الموجودة بجواله'],a:0},
+ {q:'وش الفرق الأقرب بين القصة والحكاية؟',o:['ما فيه أي فرق في الاستخدام','«الحكاية» ترتبط أكثر بفعل السرد والرواية، و«القصة» أوسع وتشمل أشكالًا مختلفة','الحكاية دائمًا حقيقية والقصة دائمًا خيالية'],a:1},
+ {q:'إذا اختارت الزائرة الأحساء، وش نبي يتغير في حكايا؟',o:['اسم البطل فقط','عناصر المكان وأسلوب اللغة بما يناسب المنطقة','لون شعار حكايا'],a:1},
+ {q:'وين تظهر العبرة في حكايا؟',o:['لازم تقول الشخصية في نهاية القصة: «والدرس المستفاد هو…»','تظهر من خلال أحداث القصة، وبعدها تضغطين «وش العبرة؟» لاكتشافها','ما فيه قيمة تعليمية'],a:1},
+ {q:'وش يحدد جنس بطل الحكاية في القصة؟',o:['اختيار المستخدم: ولد أو بنت','حروف الاسم','يختاره الذكاء الاصطناعي عشوائيًا'],a:0},
+ {q:'وش اللي يتغير في القصة لما يتغير عمر الطفل؟',o:['ما يتغير شيء','المفردات وأسلوب الحكاية بما يناسب العمر','لون الشاشة'],a:1},
+ {q:'قصص حكايا هي…',o:['حكايات شعبية أصلية تُنقل كما هي','قصص جديدة مستوحاة من البيئة والتراث السعودي','ترجمة لقصص أجنبية'],a:1},
+ {q:'وش تسوين بعد ما تخلص القصة وتبين تعرفين الدرس منها؟',o:['تضغطين «وش العبرة؟»','تنتظرين اليوم الثاني','تعيدين فتح التطبيق'],a:0},
+ {q:'وش دور الصوت في حكايا؟',o:['يقرأ الحكاية بصوت هادئ لمن تبين تسمعينها','يغيّر أحداث القصة','يغيّر المنطقة'],a:0},
+];
+const REG=[['🏜️','نجد'],['🌿','القصيم'],['🌴','الأحساء'],['⛰️','عسير'],['🏔️','العلا']];
+const shuf=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const N=5;let Q=[],qi=0,score=0;
+function startQuiz(){
+  Q=shuf(POOL).slice(0,N).map(x=>{const o=shuf(x.o.map((t,i)=>({t,ok:i===x.a})));return{q:x.q,o}});
+  qi=0;score=0;go('quiz');ask();
+}
+function ask(){
+  $('#qb').style.width=(qi/(N+1)*100)+'%';
+  if(qi===N)return region();
+  const q=Q[qi];
+  $('#qa').innerHTML='<h2>سؤال '+(qi+1)+' من '+N+'</h2><h1 style="font-size:21px">'+esc(q.q)+'</h1>'+q.o.map((x,i)=>'<button class="opt al" data-i="'+i+'">'+esc(x.t)+'</button>').join('');
+  $('#qa').onclick=e=>{
+    const b=e.target.closest('.opt');if(!b||$('#qa').dataset.lock)return;$('#qa').dataset.lock=1;
+    const ok=q.o[b.dataset.i].ok;if(ok)score++;
+    $('#qa').querySelectorAll('.opt').forEach((x,i)=>x.classList.add(q.o[i].ok?'ok':'no'));
+    setTimeout(()=>{delete $('#qa').dataset.lock;qi++;ask()},900);
+  };
+}
+function region(){ // سؤال تفاعلي بدون إجابة صحيحة
+  $('#qa').innerHTML='<h2>سؤال أخير (بدون نقاط)</h2><h1 style="font-size:21px">لو كنتِ بطلة حكايا، وش تختارين؟</h1><div class="opts c3">'+REG.map(r=>'<button class="opt"><b>'+r[0]+'</b>'+r[1]+'</button>').join('')+'</div>';
+  $('#qa').onclick=e=>{if(e.target.closest('.opt')){qi++;result()}};
+}
+function result(){
+  $('#qb').style.width='100%';
+  const [i,t,s]=score===N?['🌟','يا سلام عليك!','واضح إنك فهمتي حكايا 🤍']:score>=3?['✨','ممتاز!','عرفتي سر حكايا!']:['🤍','بداية حلوة!','جربي حكايا مرة ثانية واكتشفي عالمها.'];
+  $('#qa').innerHTML='<div class="big" style="margin-top:20px">'+i+'</div><h1 class="center">'+t+'</h1><p class="center">'+s+'</p><h2 class="center">نتيجتك: '+score+' / '+N+'</h2>'+(score===N?'<p class="center" style="color:var(--logo);font-weight:700">🎁 فزتي بالجائزة! أرِي هذي الشاشة لفريق حكايا</p>':'')+'<button class="btn" onclick="startQuiz()">العبي مرة ثانية</button>';
+  $('#qa').onclick=null;if(score>=3)confetti();
+}
+function confetti(){for(let i=0;i<40;i++){const c=document.createElement('i');c.className='conf';c.style.left=Math.random()*100+'vw';c.style.background=['#792152','#862461','#e1d8d3','#4a3751'][i%4];c.style.animationDelay=Math.random()*.8+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),4000)}}
+</script>
+</body>
+</html>
